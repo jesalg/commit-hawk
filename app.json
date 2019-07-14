@@ -1,0 +1,6 @@
+{
+  "name": "Commit Hawk",
+  "description": "Notify when watched file(s) change in a GitHub repo",
+  "repository": "https://github.com/jesalg/commit-hawk",
+  "keywords": ["ruby", "sinatra", "github-webhooks", "slack-webhook"]
+}
