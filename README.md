@@ -10,6 +10,10 @@ Commit Hawk fills that gap.
 
 ### INSTALLATION
 
+<a href="https://heroku.com/deploy">
+  <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
+</a>
+
 1. Deploy this project to Heroku or your platform of choice. 
 2. Creat a Slack Webhook. Add the webhook URL to this deployment's environment variables as `SLACK_WEBHOOK_URL`
 3. Add this deployment URL as a webhook in the GitHub repository you want to track. 
