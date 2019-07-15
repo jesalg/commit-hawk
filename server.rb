@@ -21,7 +21,7 @@ post '/payload' do
   end
 end
 
-def watched_changes(watching, commits)
+def watched_changes(watching, commits = [])
   commits.select do |commit|
     commit['modified'].any?{ |added| added.start_with?(watching) } 
   end
