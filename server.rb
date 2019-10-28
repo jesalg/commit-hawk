@@ -11,8 +11,9 @@ post '/payload' do
   
   push = JSON.parse(params[:payload])
   watching = params[:watching]
+  branch = params[:branch]
 
-  if (commits = watched_changes(watching, push['commits'])).length > 0
+  if (commits = watched_changes(watching, branch, push['ref'], push['commits'])).length > 0
     notify(watching, commits)
     ids = commits.map{ |c| c['id'] }.join(', ')
     "Wow things changed in: #{ids}"
@@ -21,8 +22,12 @@ post '/payload' do
   end
 end
 
-def watched_changes(watching, commits = nil)
+def watched_changes(watching, watch_branch, branch, commits = nil)
   commits ||= []
+  if (watch_branch && !branch.end_with?(watch_branch))
+    return []
+  end
+
   commits.select do |commit|
     commit['modified'].any?{ |added| added.start_with?(watching) } 
   end
