@@ -22,7 +22,8 @@ Commit Hawk fills that gap.
     - Content Type: `application/x-www-form-urlencoded`
     - Which events would you like to trigger this webhook? `Just the push event.`
 
-4. That's it! When the files you are watching change, you will get a Slack notification.
+4. That's it! When the files you are watching change, you will get a Slack notification. For example:
+![Example Slack Message](https://raw.githubusercontent.com/jesalg/commit-hawk/master/example.png)
 
 ### CONTRIBUTE!
 
