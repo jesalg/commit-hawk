@@ -45,7 +45,7 @@ def notify(watching, commits)
         "title_link": commit['url'],
         "footer": 'Commit Hawk',
         "footer_icon": 'https://platform.slack-edge.com/img/default_application_icon.png',
-        "ts": DateTime.parse(commit['timestamp']).to_i
+        "ts": DateTime.parse(commit['timestamp']).to_time.to_i
       }
     end
     notifier.ping "Contents of #{watching} were changed in:", attachments: attachments, icon_emoji: ":eagle:"
