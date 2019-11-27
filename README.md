@@ -16,8 +16,12 @@ Commit Hawk fills that gap.
 
 1. Deploy this project to Heroku or your platform of choice. 
 2. Install the [Incoming Slack Webhook](https://slack.com/apps/A0F7XDUAZ-incoming-webhooks) app to your Slack workspace. Add the webhook URL to this deployment's `SLACK_WEBHOOK_URL` environment variable
-3. Add this deployment URL as a webhook in the GitHub repository you want to track under it's `Settings` -> `Webhooks` with the following params:
-    - Payload URL: `http://your-deployment.heroku.com/payload?watching=path/to/some/dir/or/file`
+3. Add this deployment URL as a webhook in the GitHub repository you want to track under it's `Settings` -> `Webhooks` with the following URL & params:
+    - Payload URL host: `http://your-deployment.heroku.com/payload`
+    - Payload URL params: 
+        - `watching`: Dir or name of the files you want to watch eg: `path/to/some/dir/or/file`
+        - `branch` (_optional_): Branch name you want to watch eg: `master`
+        - `ignore_commit_msg` (_optional_): Ignore certain commits by the message eg: `Merge branch master`
     - Generate and take a note of the secret and add it to your deploy's `WEBHOOK_SECRET_TOKEN` environment variable
     - Content Type: `application/x-www-form-urlencoded`
     - Which events would you like to trigger this webhook? `Just the push event.`
