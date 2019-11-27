@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require 'json'
 require 'pry-remote'
@@ -6,30 +8,30 @@ require 'slack-notifier'
 post '/payload' do
   request.body.rewind
   payload_body = request.body.read
-  
+
   verify_signature(payload_body)
   
   push = JSON.parse(params[:payload])
-  watching = params[:watching]
-  branch = params[:branch]
+  watch_files = params[:watching]
+  watch_branch = params[:branch]
+  ignore_commit_msg = params[:ignore_commit_msg]
 
-  if (commits = watched_changes(watching, branch, push['ref'], push['commits'])).length > 0
-    notify(watching, commits)
-    ids = commits.map{ |c| c['id'] }.join(', ')
-    "Wow things changed in: #{ids}"
+  if !(commits = watched_changes(watch_files, watch_branch, ignore_commit_msg, push['ref'], push['commits'])).empty?
+    notify(watch_files, commits)
+    ids = commits.map { |c| c['id'] }.join(', ')
+    "Files changed in: #{ids}"
   else
-    "Meh I don't care"
+    'No relevant changes detected'
   end
 end
 
-def watched_changes(watching, watch_branch, branch, commits = nil)
+def watched_changes(watch_files, watch_branch, ignore_commit_msg, branch, commits = nil)
   commits ||= []
-  if (watch_branch && !branch.end_with?(watch_branch))
-    return []
-  end
+  return [] if watch_branch && !branch.end_with?(watch_branch)
 
   commits.select do |commit|
-    commit['modified'].any?{ |added| added.start_with?(watching) } 
+    (!ignore_commit_msg || !commit['message'].include?(ignore_commit_msg)) &&
+      commit['modified'].any? { |modified| modified.start_with?(watch_files) }
   end
 end
 
@@ -48,11 +50,13 @@ def notify(watching, commits)
         "ts": DateTime.parse(commit['timestamp']).to_time.to_i
       }
     end
-    notifier.ping "Contents of #{watching} were changed in:", attachments: attachments, icon_emoji: ":eagle:"
+    notifier.ping "Contents of #{watching} were changed in:", attachments: attachments, icon_emoji: ':eagle:'
   end
 end
 
 def verify_signature(payload_body)
   signature = 'sha1=' + OpenSSL::HMAC.hexdigest(OpenSSL::Digest.new('sha1'), ENV['WEBHOOK_SECRET_TOKEN'], payload_body)
-  return halt 500, "Signatures didn't match!" unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
+  unless Rack::Utils.secure_compare(signature, request.env['HTTP_X_HUB_SIGNATURE'])
+    return halt 500, "Signatures didn't match!"
+  end
 end
