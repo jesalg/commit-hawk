@@ -1,9 +1,11 @@
-source 'https://rubygems.org'
-ruby "2.6.0"
+# frozen_string_literal: true
 
-gem "thin"
-gem "sinatra"
-gem "byebug"
-gem "pry"
-gem "pry-remote"
-gem "slack-notifier"
+source 'https://rubygems.org'
+ruby '2.6.5'
+
+gem 'byebug'
+gem 'pry'
+gem 'pry-remote'
+gem 'sinatra'
+gem 'slack-notifier'
+gem 'thin'
