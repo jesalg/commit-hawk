@@ -2,6 +2,7 @@
 
 require 'sinatra'
 require 'json'
+require 'cgi'
 require 'pry-remote'
 require 'slack-notifier'
 
@@ -14,7 +15,7 @@ post '/payload' do
   push = JSON.parse(params[:payload])
   watch_files = params[:watching]
   watch_branch = params[:branch]
-  ignore_commit_msg = params[:ignore_commit_msg]
+  ignore_commit_msg = params[:ignore_commit_msg] ? CGI.unescape(params[:ignore_commit_msg]) : nil
 
   if !(commits = watched_changes(watch_files, watch_branch, ignore_commit_msg, push['ref'], push['commits'])).empty?
     notify(watch_files, commits)
