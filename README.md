@@ -10,6 +10,14 @@ Commit Hawk fills that gap.
 
 ### INSTALLATION
 
+#### GitHub Action (Recommended)
+
+Commit Hawk is now available as a GitHub Action: https://github.com/marketplace/actions/commithawk
+
+If you still want to self-host, follow the instructions below. Although this self-hosted version will be eventually deprecated.
+
+#### Self-Hosted
+
 <a href="https://heroku.com/deploy?env[SLACK_WEBHOOK_URL]=changeme&env[WEBHOOK_SECRET_TOKEN]=changeme">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
